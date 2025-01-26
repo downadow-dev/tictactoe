@@ -65,56 +65,56 @@ public class Main implements ApplicationListener {
                 }
                 
                 /* ход бота */
-                else if(touch.x > 0f && touch.x < 0.6f && touch.y > 0f && touch.y < 0.6f && next == X) {
-                    generateNext();
-                    next = O;
+                else if(touch.x > 0f && touch.x < 0.6f && touch.y > 0f && touch.y < 0.6f) {
+                    generateNext(next == X ? O : X, next);
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 }
                 /* ввод */
                 else if(touch.x > 1f && touch.x < 2f && touch.y > 2.5f && touch.y < 3.5f && map[0][0] == 0) {
                     map[0][0] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 2f && touch.x < 3f && touch.y > 2.5f && touch.y < 3.5f && map[0][1] == 0) {
                     map[0][1] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 3f && touch.x < 4f && touch.y > 2.5f && touch.y < 3.5f && map[0][2] == 0) {
                     map[0][2] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 1f && touch.x < 2f && touch.y > 1.5f && touch.y < 2.5f && map[1][0] == 0) {
                     map[1][0] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 2f && touch.x < 3f && touch.y > 1.5f && touch.y < 2.5f && map[1][1] == 0) {
                     map[1][1] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 3f && touch.x < 4f && touch.y > 1.5f && touch.y < 2.5f && map[1][2] == 0) {
                     map[1][2] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 1f && touch.x < 2f && touch.y > 0.5f && touch.y < 1.5f && map[2][0] == 0) {
                     map[2][0] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 2f && touch.x < 3f && touch.y > 0.5f && touch.y < 1.5f && map[2][1] == 0) {
                     map[2][1] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 } else if(touch.x > 3f && touch.x < 4f && touch.y > 0.5f && touch.y < 1.5f && map[2][2] == 0) {
                     map[2][2] = next;
-                    next = next == X ? O : X;
+                    next = (next == X ? O : X);
                     check();
                     return true;
                 }
@@ -132,7 +132,7 @@ public class Main implements ApplicationListener {
         
         shape.setProjectionMatrix(viewport.getCamera().combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
-        shape.setColor(0, 0, 0, 1);
+        shape.setColor(0.4f, 0.4f, 0.4f, 1);
         shape.line(1f, 1.5f, 4f, 1.5f);
         shape.line(1f, 2.5f, 4f, 2.5f);
         shape.line(2f, 0.5f, 2f, 3.5f);
@@ -217,90 +217,90 @@ public class Main implements ApplicationListener {
     }
     
     /* ход бота */
-    private void generateNext() {
+    private void generateNext(int player, int bot) {
         /* побеждаем */
         
-        if(map[0][0] == X && map[1][1] == X && map[2][2] == 0) {
-            map[2][2] = X;
+        if(map[0][0] == bot && map[1][1] == bot && map[2][2] == 0) {
+            map[2][2] = bot;
             return;
-        } else if(map[0][0] == 0 && map[1][1] == X && map[2][2] == X) {
-            map[0][0] = X;
+        } else if(map[0][0] == 0 && map[1][1] == bot && map[2][2] == bot) {
+            map[0][0] = bot;
             return;
-        } else if(map[0][0] == X && map[1][1] == 0 && map[2][2] == X) {
-            map[1][1] = X;
+        } else if(map[0][0] == bot && map[1][1] == 0 && map[2][2] == bot) {
+            map[1][1] = bot;
             return;
-        } else if(map[0][2] == X && map[1][1] == X && map[2][0] == 0) {
-            map[2][0] = X;
+        } else if(map[0][2] == bot && map[1][1] == bot && map[2][0] == 0) {
+            map[2][0] = bot;
             return;
-        } else if(map[0][2] == 0 && map[1][1] == X && map[2][0] == X) {
-            map[0][2] = X;
+        } else if(map[0][2] == 0 && map[1][1] == bot && map[2][0] == bot) {
+            map[0][2] = bot;
             return;
-        } else if(map[0][2] == X && map[1][1] == 0 && map[2][0] == X) {
-            map[1][1] = X;
+        } else if(map[0][2] == bot && map[1][1] == 0 && map[2][0] == bot) {
+            map[1][1] = bot;
             return;
         }
         
         for(int i = 0; i < 3; i++) {
-            if(map[i][0] == X && map[i][1] == X && map[i][2] == 0) {
-                map[i][2] = X;
+            if(map[i][0] == bot && map[i][1] == bot && map[i][2] == 0) {
+                map[i][2] = bot;
                 return;
-            } else if(map[i][0] == 0 && map[i][1] == X && map[i][2] == X) {
-                map[i][0] = X;
+            } else if(map[i][0] == 0 && map[i][1] == bot && map[i][2] == bot) {
+                map[i][0] = bot;
                 return;
-            } else if(map[i][0] == X && map[i][1] == 0 && map[i][2] == X) {
-                map[i][1] = X;
+            } else if(map[i][0] == bot && map[i][1] == 0 && map[i][2] == bot) {
+                map[i][1] = bot;
                 return;
-            } else if(map[0][i] == X && map[1][i] == X && map[2][i] == 0) {
-                map[2][i] = X;
+            } else if(map[0][i] == bot && map[1][i] == bot && map[2][i] == 0) {
+                map[2][i] = bot;
                 return;
-            } else if(map[0][i] == 0 && map[1][i] == X && map[2][i] == X) {
-                map[0][i] = X;
+            } else if(map[0][i] == 0 && map[1][i] == bot && map[2][i] == bot) {
+                map[0][i] = bot;
                 return;
-            } else if(map[0][i] == X && map[1][i] == 0 && map[2][i] == X) {
-                map[1][i] = X;
+            } else if(map[0][i] == bot && map[1][i] == 0 && map[2][i] == bot) {
+                map[1][i] = bot;
                 return;
             }
         }
         
         /* защита */
-        if(map[0][0] == O && map[1][1] == O && map[2][2] == 0) {
-            map[2][2] = X;
+        if(map[0][0] == player && map[1][1] == player && map[2][2] == 0) {
+            map[2][2] = bot;
             return;
-        } else if(map[0][0] == 0 && map[1][1] == O && map[2][2] == O) {
-            map[0][0] = X;
+        } else if(map[0][0] == 0 && map[1][1] == player && map[2][2] == player) {
+            map[0][0] = bot;
             return;
-        } else if(map[0][0] == O && map[1][1] == 0 && map[2][2] == O) {
-            map[1][1] = X;
+        } else if(map[0][0] == player && map[1][1] == 0 && map[2][2] == player) {
+            map[1][1] = bot;
             return;
-        } else if(map[0][2] == O && map[1][1] == O && map[2][0] == 0) {
-            map[2][0] = X;
+        } else if(map[0][2] == player && map[1][1] == player && map[2][0] == 0) {
+            map[2][0] = bot;
             return;
-        } else if(map[0][2] == 0 && map[1][1] == O && map[2][0] == O) {
-            map[0][2] = X;
+        } else if(map[0][2] == 0 && map[1][1] == player && map[2][0] == player) {
+            map[0][2] = bot;
             return;
-        } else if(map[0][2] == O && map[1][1] == 0 && map[2][0] == O) {
-            map[1][1] = X;
+        } else if(map[0][2] == player && map[1][1] == 0 && map[2][0] == player) {
+            map[1][1] = bot;
             return;
         }
         
         for(int i = 0; i < 3; i++) {
-            if(map[i][0] == O && map[i][1] == O && map[i][2] == 0) {
-                map[i][2] = X;
+            if(map[i][0] == player && map[i][1] == player && map[i][2] == 0) {
+                map[i][2] = bot;
                 return;
-            } else if(map[i][0] == 0 && map[i][1] == O && map[i][2] == O) {
-                map[i][0] = X;
+            } else if(map[i][0] == 0 && map[i][1] == player && map[i][2] == player) {
+                map[i][0] = bot;
                 return;
-            } else if(map[i][0] == O && map[i][1] == 0 && map[i][2] == O) {
-                map[i][1] = X;
+            } else if(map[i][0] == player && map[i][1] == 0 && map[i][2] == player) {
+                map[i][1] = bot;
                 return;
-            } else if(map[0][i] == O && map[1][i] == O && map[2][i] == 0) {
-                map[2][i] = X;
+            } else if(map[0][i] == player && map[1][i] == player && map[2][i] == 0) {
+                map[2][i] = bot;
                 return;
-            } else if(map[0][i] == 0 && map[1][i] == O && map[2][i] == O) {
-                map[0][i] = X;
+            } else if(map[0][i] == 0 && map[1][i] == player && map[2][i] == player) {
+                map[0][i] = bot;
                 return;
-            } else if(map[0][i] == O && map[1][i] == 0 && map[2][i] == O) {
-                map[1][i] = X;
+            } else if(map[0][i] == player && map[1][i] == 0 && map[2][i] == player) {
+                map[1][i] = bot;
                 return;
             }
         }
@@ -310,10 +310,10 @@ public class Main implements ApplicationListener {
         int x = new Random().nextInt(3);
         int y = new Random().nextInt(3);
         if(map[y][x] != 0) {
-            generateNext();
+            generateNext(player, bot);
             return;
         }
         
-        map[y][x] = X;
+        map[y][x] = bot;
     }
 }
