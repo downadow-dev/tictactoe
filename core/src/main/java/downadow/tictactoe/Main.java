@@ -40,6 +40,7 @@ public class Main implements ApplicationListener {
         {0, 0, 0}
     };
     Texture xTexture, oTexture;
+    int lineX = -1, lineY = -1, lineX2 = -1, lineY2 = -1;
     
     public void create() {
         touch = new Vector2();
@@ -61,6 +62,10 @@ public class Main implements ApplicationListener {
                         }
                     }
                     next = X;
+                    lineX = -1;
+                    lineY = -1;
+                    lineX2 = -1;
+                    lineY2 = -1;
                     return true;
                 }
                 
@@ -132,7 +137,7 @@ public class Main implements ApplicationListener {
         
         shape.setProjectionMatrix(viewport.getCamera().combined);
         shape.begin(ShapeRenderer.ShapeType.Line);
-        shape.setColor(0.4f, 0.4f, 0.4f, 1);
+        shape.setColor(new Color(0.4f, 0.4f, 0.4f, 1));
         shape.line(1f, 1.5f, 4f, 1.5f);
         shape.line(1f, 2.5f, 4f, 2.5f);
         shape.line(2f, 0.5f, 2f, 3.5f);
@@ -156,6 +161,14 @@ public class Main implements ApplicationListener {
             }
         }
         batch.end();
+        
+        if(lineX != -1) {
+            shape.setProjectionMatrix(viewport.getCamera().combined);
+            shape.begin(ShapeRenderer.ShapeType.Line);
+            shape.setColor(new Color(0.25f, 0.25f, 0.25f, 1));
+            shape.line(1.5f + lineX, 3f - lineY, 1.5f + lineX2, 3f - lineY2);
+            shape.end();
+        }
     }
     
     public void resize(int width, int height) {
@@ -179,41 +192,48 @@ public class Main implements ApplicationListener {
                 }
             }
         }
-        if(!ok) next = 0;
+        if(!ok) {
+            next = 0;
+            return;
+        }
         
-        if(map[0][0] == X && map[0][1] == X && map[0][2] == X)
+        if((map[0][0] == X && map[1][1] == X && map[2][2] == X) ||
+           (map[0][0] == O && map[1][1] == O && map[2][2] == O)) {
+            lineX = 0;
+            lineY = 0;
+            lineX2 = 2;
+            lineY2 = 2;
             next = 0;
-        else if(map[1][0] == X && map[1][1] == X && map[1][2] == X)
+            return;
+        } else if((map[0][2] == X && map[1][1] == X && map[2][0] == X) ||
+                  (map[0][2] == O && map[1][1] == O && map[2][0] == O)) {
+            lineX = 2;
+            lineY = 0;
+            lineX2 = 0;
+            lineY2 = 2;
             next = 0;
-        else if(map[2][0] == X && map[2][1] == X && map[2][2] == X)
-            next = 0;
-        else if(map[0][0] == X && map[1][0] == X && map[2][0] == X)
-            next = 0;
-        else if(map[0][1] == X && map[1][1] == X && map[2][1] == X)
-            next = 0;
-        else if(map[0][2] == X && map[1][2] == X && map[2][2] == X)
-            next = 0;
-        else if(map[0][0] == X && map[1][1] == X && map[2][2] == X)
-            next = 0;
-        else if(map[0][2] == X && map[1][1] == X && map[2][0] == X)
-            next = 0;
+            return;
+        }
         
-        else if(map[0][0] == O && map[0][1] == O && map[0][2] == O)
-            next = 0;
-        else if(map[1][0] == O && map[1][1] == O && map[1][2] == O)
-            next = 0;
-        else if(map[2][0] == O && map[2][1] == O && map[2][2] == O)
-            next = 0;
-        else if(map[0][0] == O && map[1][0] == O && map[2][0] == O)
-            next = 0;
-        else if(map[0][1] == O && map[1][1] == O && map[2][1] == O)
-            next = 0;
-        else if(map[0][2] == O && map[1][2] == O && map[2][2] == O)
-            next = 0;
-        else if(map[0][0] == O && map[1][1] == O && map[2][2] == O)
-            next = 0;
-        else if(map[0][2] == O && map[1][1] == O && map[2][0] == O)
-            next = 0;
+        for(int i = 0; i < 3; i++) {
+            if((map[i][0] == X && map[i][1] == X && map[i][2] == X) ||
+               (map[i][0] == O && map[i][1] == O && map[i][2] == O)) {
+                lineX = 0;
+                lineY = i;
+                lineX2 = 2;
+                lineY2 = i;
+                next = 0;
+                return;
+            } else if((map[0][i] == X && map[1][i] == X && map[2][i] == X) ||
+                      (map[0][i] == O && map[1][i] == O && map[2][i] == O)) {
+                lineX = i;
+                lineY = 0;
+                lineX2 = i;
+                lineY2 = 2;
+                next = 0;
+                return;
+            }
+        }
     }
     
     /* ход бота */
