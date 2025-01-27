@@ -165,7 +165,7 @@ public class Main implements ApplicationListener {
         if(lineX != -1) {
             shape.setProjectionMatrix(viewport.getCamera().combined);
             shape.begin(ShapeRenderer.ShapeType.Line);
-            shape.setColor(new Color(0.25f, 0.25f, 0.25f, 1));
+            shape.setColor(new Color(0.2f, 0.2f, 0.2f, 1));
             shape.line(1.5f + lineX, 3f - lineY, 1.5f + lineX2, 3f - lineY2);
             shape.end();
         }
@@ -182,21 +182,6 @@ public class Main implements ApplicationListener {
     
     /* проверка */
     private void check() {
-        boolean ok = false;
-        loop:
-        for(int i = 0; i < 3; i++) {
-            for(int j = 0; j < 3; j++) {
-                if(map[i][j] == 0) {
-                    ok = true;
-                    break loop;
-                }
-            }
-        }
-        if(!ok) {
-            next = 0;
-            return;
-        }
-        
         if((map[0][0] == X && map[1][1] == X && map[2][2] == X) ||
            (map[0][0] == O && map[1][1] == O && map[2][2] == O)) {
             lineX = 0;
@@ -234,6 +219,18 @@ public class Main implements ApplicationListener {
                 return;
             }
         }
+        
+        boolean ok = false;
+        loop:
+        for(int i = 0; i < 3; i++) {
+            for(int j = 0; j < 3; j++) {
+                if(map[i][j] == 0) {
+                    ok = true;
+                    break loop;
+                }
+            }
+        }
+        if(!ok) next = 0;
     }
     
     /* ход бота */
